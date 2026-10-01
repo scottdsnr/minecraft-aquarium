@@ -1,8 +1,10 @@
 # minecraft-aquarium
 
 A Bedrock add-on that procedurally generates an aquarium: a viewing corridor
-lined with four themed zones, each with its own decoration, mobs, and a
-colored accent trim marking the zone from outside. Same seed, same aquarium.
+alongside one continuous, open-top tank divided into four themed zones. Fish
+can swim between zones (there are no walls between them), and each zone has
+its own substrate, decoration, mobs, and a colored accent trim marking it
+from outside. Same seed, same aquarium.
 
 - **Icy Zone** (light blue accent) — icebergs of packed ice/snow; squid, polar bear.
 - **Kelp Forest** (lime accent) — kelp towers, drip-leaf; cod, salmon, turtle.
@@ -18,11 +20,11 @@ behavior_packs/aquarium/
 │   └── aquarium/generate.mcfunction   # /function aquarium/generate
 └── scripts/
     ├── main.js            # scriptevent entry point
-    ├── generator.js        # lays out the corridor + row of exhibits
-    ├── exhibits.js          # builds one tank + decor + mobs + sign
-    ├── tanks.js             # reusable rectangular glass tank
+    ├── generator.js        # builds the corridor + one shared tank, then slices it into zones
+    ├── exhibits.js          # furnishes one zone (floor/decor/mobs/trim/sign) in the shared tank
+    ├── tanks.js             # reusable rectangular (optionally open-top) glass tank
     ├── decorations.js       # per-theme coral/kelp/rock scatter + mob table
-    ├── blocks.js             # generator-based fillBox/hollowBox helpers
+    ├── blocks.js             # generator-based /fill helpers
     └── rng.js                 # seeded PRNG (mulberry32)
 
 resource_packs/aquarium/
@@ -54,6 +56,6 @@ the server on large builds.
 - Change which exhibits get built, their order, or their width by passing
   `exhibits` in the scriptevent JSON, e.g.
   `{"exhibits":[{"type":"icy","width":14},{"type":"deep_ocean","width":16}]}`.
-- `createTankJob`/`createExhibitJob` are reusable building blocks for
+- `createTankJob`/`furnishZoneJob` are reusable building blocks for
   composing more elaborate layouts (tunnels, cylindrical tanks, multi-floor
   buildings) beyond the single-corridor generator in `generator.js`.
