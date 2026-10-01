@@ -5,7 +5,7 @@
     "description": "Procedurally generates an aquarium building with themed tanks, decorations, and mobs.",
     "uuid": "66af0210-9264-41fc-91e7-a6842bd12214",
     "version": [1, 0, 0],
-    "min_engine_version": [1, 21, 0]
+    "min_engine_version": [1, 20, 0]
   },
   "modules": [
     {
@@ -24,7 +24,7 @@
   "dependencies": [
     {
       "module_name": "@minecraft/server",
-      "version": "1.17.0"
+      "version": "1.13.0"
     },
     {
       "uuid": "84145127-e7ef-44dd-9b30-ee716359f993",
