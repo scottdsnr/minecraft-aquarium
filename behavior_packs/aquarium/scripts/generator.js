@@ -15,6 +15,7 @@ const CORRIDOR_HEIGHT = 5;
 const EXHIBIT_GAP = 3;
 const TANK_DEPTH = 14;
 const TANK_HEIGHT = 8;
+const FOUNDATION_DEPTH = 10;
 
 /**
  * Generates a full aquarium: a viewing corridor running along +X, with a
@@ -33,6 +34,16 @@ export function* generateAquariumJob(dimension, options = {}) {
     const corridorX2 = origin.x + totalLength;
     const corridorZ1 = origin.z;
     const corridorZ2 = origin.z + CORRIDOR_WIDTH - 1;
+    const footprintZ2 = corridorZ2 + TANK_DEPTH;
+
+    // Solid foundation under the whole footprint so the building doesn't
+    // float where terrain dips below the origin's height.
+    yield* fillBoxJob(
+        dimension,
+        corridorX1, origin.y - FOUNDATION_DEPTH, corridorZ1,
+        corridorX2, origin.y - 1, footprintZ2,
+        "minecraft:stone"
+    );
 
     // Corridor floor and ceiling.
     yield* fillBoxJob(dimension, corridorX1, origin.y, corridorZ1, corridorX2, origin.y, corridorZ2, "minecraft:stone_bricks");

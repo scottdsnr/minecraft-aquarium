@@ -21,8 +21,8 @@ export function* createTankJob(dimension, opts) {
     const y2 = y + height - 1;
     const z2 = z + depth - 1;
 
-    // Shell.
-    yield* fillBoxJob(dimension, x, y, z, x2, y2, z2, wall);
+    // Shell (hollow: just the walls, air inside).
+    yield* fillBoxJob(dimension, x, y, z, x2, y2, z2, wall, "hollow");
 
     // Substrate: one block layer on the bottom of the interior.
     yield* fillBoxJob(dimension, x + 1, y + 1, z + 1, x2 - 1, y + 1, z2 - 1, floor);
