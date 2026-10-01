@@ -1,20 +1,26 @@
+import { fillBoxJob } from "./blocks.js";
 import { createTankJob } from "./tanks.js";
 import { decorateTankJob, spawnMobs, themeFor } from "./decorations.js";
 
 /**
- * Builds one themed exhibit: a tank, its decoration, and its mobs, then
- * labels it with a sign facing the viewing corridor.
+ * Builds one themed exhibit: a tank, its decoration, its mobs, a colored
+ * accent trim identifying the zone from outside, and a sign facing the
+ * viewing corridor.
  */
 export function* createExhibitJob(dimension, opts) {
     const { x, y, z, width, depth, height, theme, rng, label } = opts;
+    const themeDef = themeFor(theme);
 
-    const tankOpts = { x, y, z, width, depth, height, floor: themeFor(theme).floor };
+    const tankOpts = { x, y, z, width, depth, height, floor: themeDef.floor };
     yield* createTankJob(dimension, tankOpts);
 
     yield* decorateTankJob(dimension, tankOpts.interior, theme, rng);
     spawnMobs(dimension, tankOpts.interior, theme, rng);
 
-    placeLabel(dimension, x, y, z, width, label ?? titleCase(theme));
+    // Zone-color accent stripe along the bottom of the corridor-facing wall.
+    yield* fillBoxJob(dimension, x, y, z - 1, x + width - 1, y, z - 1, themeDef.accent);
+
+    placeLabel(dimension, x, y, z, width, label ?? themeDef.label ?? titleCase(theme));
 
     return tankOpts.interior;
 }
