@@ -1,0 +1,37 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "Aquarium Generator",
+    "description": "Procedurally generates an aquarium building with themed tanks, decorations, and mobs.",
+    "uuid": "66af0210-9264-41fc-91e7-a6842bd12214",
+    "version": [1, 0, 0],
+    "min_engine_version": [1, 21, 0]
+  },
+  "modules": [
+    {
+      "type": "data",
+      "uuid": "65b2c349-bd7e-4844-8247-cc39402ccef9",
+      "version": [1, 0, 0]
+    },
+    {
+      "type": "script",
+      "language": "javascript",
+      "uuid": "7f2a1c4e-3b6d-4a8f-9c0e-1d2f3a4b5c6d",
+      "entry": "scripts/main.js",
+      "version": [1, 0, 0]
+    }
+  ],
+  "dependencies": [
+    {
+      "module_name": "@minecraft/server",
+      "version": "1.17.0"
+    },
+    {
+      "uuid": "84145127-e7ef-44dd-9b30-ee716359f993",
+      "version": [1, 0, 0]
+    }
+  ],
+  "metadata": {
+    "authors": ["minecraft-aquarium"]
+  }
+}
