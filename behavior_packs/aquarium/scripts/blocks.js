@@ -1,7 +1,10 @@
-// Low-level block placement helpers, written as generators so callers can
-// `yield*` them into a system.runJob and spread heavy fills across ticks.
-
-const YIELD_EVERY = 256;
+// Block placement helpers, written as generators so callers can `yield*`
+// them into a system.runJob and spread work across ticks.
+//
+// These shell out to the /fill command rather than looping individual
+// Block.setType calls: it's both much faster for large volumes and more
+// reliable for liquids (a looped setType on "minecraft:water" can silently
+// no-op on some engine versions).
 
 export function setBlock(dimension, x, y, z, blockType) {
     try {
@@ -11,38 +14,18 @@ export function setBlock(dimension, x, y, z, blockType) {
     }
 }
 
-export function* fillBoxJob(dimension, x1, y1, z1, x2, y2, z2, blockType) {
+/** mode: undefined (solid fill), "hollow" (shell only, air inside), "keep" (only replace air). */
+export function* fillBoxJob(dimension, x1, y1, z1, x2, y2, z2, blockType, mode) {
     const minX = Math.min(x1, x2), maxX = Math.max(x1, x2);
     const minY = Math.min(y1, y2), maxY = Math.max(y1, y2);
     const minZ = Math.min(z1, z2), maxZ = Math.max(z1, z2);
+    const block = blockType.replace(/^minecraft:/, "");
 
-    let count = 0;
-    for (let x = minX; x <= maxX; x++) {
-        for (let y = minY; y <= maxY; y++) {
-            for (let z = minZ; z <= maxZ; z++) {
-                setBlock(dimension, x, y, z, blockType);
-                if (++count % YIELD_EVERY === 0) yield;
-            }
-        }
+    const cmd = `fill ${minX} ${minY} ${minZ} ${maxX} ${maxY} ${maxZ} ${block}${mode ? " " + mode : ""}`;
+    try {
+        dimension.runCommand(cmd);
+    } catch {
+        // Volume too large for one /fill call, or area unloaded; skip.
     }
-}
-
-export function* hollowBoxJob(dimension, x1, y1, z1, x2, y2, z2, blockType) {
-    const minX = Math.min(x1, x2), maxX = Math.max(x1, x2);
-    const minY = Math.min(y1, y2), maxY = Math.max(y1, y2);
-    const minZ = Math.min(z1, z2), maxZ = Math.max(z1, z2);
-
-    let count = 0;
-    for (let x = minX; x <= maxX; x++) {
-        for (let y = minY; y <= maxY; y++) {
-            for (let z = minZ; z <= maxZ; z++) {
-                const onShell =
-                    x === minX || x === maxX ||
-                    y === minY || y === maxY ||
-                    z === minZ || z === maxZ;
-                if (onShell) setBlock(dimension, x, y, z, blockType);
-                if (++count % YIELD_EVERY === 0) yield;
-            }
-        }
-    }
+    yield;
 }

@@ -19,13 +19,21 @@ export function* createExhibitJob(dimension, opts) {
     return tankOpts.interior;
 }
 
+// Standing signs use a 16-step "ground_sign_direction" state (0-15, same
+// scale as player yaw/entity rotation). The sign sits just south of the
+// tank, so its text needs to face south (toward smaller Z) to be readable
+// by someone walking the corridor and looking north at the exhibit.
+const SIGN_DIRECTION_SOUTH = 0;
+
 function placeLabel(dimension, x, y, z, width, text) {
     const signX = x + Math.floor(width / 2);
     const signY = y + 1;
+    const signZ = z - 1;
     try {
-        const block = dimension.getBlock({ x: signX, y: signY, z: z - 1 });
-        block?.setType("minecraft:standing_sign");
-        const sign = block?.getComponent("minecraft:sign");
+        dimension.runCommand(
+            `setblock ${signX} ${signY} ${signZ} standing_sign ["ground_sign_direction"=${SIGN_DIRECTION_SOUTH}]`
+        );
+        const sign = dimension.getBlock({ x: signX, y: signY, z: signZ })?.getComponent("minecraft:sign");
         sign?.setText(text);
     } catch {
         // Sign component availability varies by engine version; non-fatal.
