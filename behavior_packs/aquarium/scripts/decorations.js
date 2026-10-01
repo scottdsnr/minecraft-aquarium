@@ -1,8 +1,36 @@
 import { setBlock } from "./blocks.js";
 import { pick } from "./rng.js";
 
+// Four zones, matching the rescue-aquarium concept: Icy, Kelp Forest,
+// Coral Reef, Deep Ocean. `accent` is a colored concrete used as a trim
+// stripe on each zone's exterior so zones are visually distinguishable
+// from outside the building, matching the reference's per-zone color coding.
+//
+// Penguins, reef dolphins, and crabs aren't vanilla Bedrock mobs as of this
+// add-on's target engine version — substituted with the closest vanilla
+// equivalent below. Swap these for a mob add-on's entity IDs if you have one.
 export const THEMES = {
-    tropical_reef: {
+    icy: {
+        label: "Icy Zone",
+        accent: "minecraft:light_blue_concrete",
+        floor: "minecraft:packed_ice",
+        coral: [],
+        extras: ["minecraft:snow_block", "minecraft:blue_ice", "minecraft:packed_ice"],
+        pillar: "minecraft:packed_ice", // iceberg
+        mobs: ["minecraft:squid", "minecraft:polar_bear"], // penguin: no vanilla equivalent
+    },
+    kelp_forest: {
+        label: "Kelp Forest",
+        accent: "minecraft:lime_concrete",
+        floor: "minecraft:gravel",
+        coral: [],
+        extras: ["minecraft:kelp", "minecraft:seagrass", "minecraft:big_dripleaf", "minecraft:small_dripleaf"],
+        pillar: "minecraft:kelp", // kelp tower
+        mobs: ["minecraft:cod", "minecraft:salmon", "minecraft:turtle"], // crab: no vanilla equivalent
+    },
+    coral_reef: {
+        label: "Coral Reef",
+        accent: "minecraft:pink_concrete",
         floor: "minecraft:sand",
         coral: [
             "minecraft:brain_coral_block",
@@ -11,48 +39,29 @@ export const THEMES = {
             "minecraft:horn_coral_block",
             "minecraft:bubble_coral_block",
         ],
-        extras: ["minecraft:sea_pickle", "minecraft:kelp"],
+        extras: ["minecraft:sea_pickle"],
         pillar: "minecraft:tube_coral_block",
-        mobs: ["minecraft:tropicalfish", "minecraft:pufferfish"],
-    },
-    kelp_forest: {
-        floor: "minecraft:gravel",
-        coral: [],
-        extras: ["minecraft:kelp", "minecraft:seagrass"],
-        pillar: "minecraft:stone",
-        mobs: ["minecraft:cod", "minecraft:salmon", "minecraft:turtle"],
+        mobs: ["minecraft:tropicalfish", "minecraft:dolphin"],
     },
     deep_ocean: {
-        floor: "minecraft:clay",
+        label: "Deep Ocean Zone",
+        accent: "minecraft:black_concrete",
+        floor: "minecraft:deepslate",
         coral: [],
-        extras: ["minecraft:sea_lantern", "minecraft:deepslate"],
-        pillar: "minecraft:prismarine",
-        mobs: ["minecraft:squid", "minecraft:guardian"],
-    },
-    jellyfish: {
-        floor: "minecraft:soul_sand",
-        coral: [],
-        extras: ["minecraft:sea_lantern"],
-        pillar: "minecraft:sea_lantern",
-        mobs: ["minecraft:glow_squid"],
-    },
-    arctic: {
-        floor: "minecraft:packed_ice",
-        coral: [],
-        extras: ["minecraft:blue_ice", "minecraft:snow_block"],
-        pillar: "minecraft:packed_ice",
-        mobs: ["minecraft:salmon", "minecraft:polar_bear"],
+        extras: ["minecraft:deepslate", "minecraft:amethyst_block", "minecraft:budding_amethyst", "minecraft:deepslate_gold_ore"],
+        pillar: "minecraft:amethyst_block", // trench crystal formation
+        mobs: ["minecraft:glow_squid", "minecraft:axolotl"],
     },
 };
 
 export function themeFor(name) {
-    return THEMES[name] ?? THEMES.tropical_reef;
+    return THEMES[name] ?? THEMES.coral_reef;
 }
 
 /**
- * Scatters coral/kelp/rock decoration across the tank's floor layer, plus
- * the occasional short pillar so the tank reads as furnished rather than
- * an empty box with a colored floor.
+ * Scatters themed decoration across the tank's floor layer, plus the
+ * occasional short pillar/iceberg/crystal cluster so the tank reads as
+ * furnished rather than an empty box with a colored floor.
  */
 export function* decorateTankJob(dimension, interior, themeName, rng) {
     const theme = themeFor(themeName);

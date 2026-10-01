@@ -1,8 +1,13 @@
 # minecraft-aquarium
 
 A Bedrock add-on that procedurally generates an aquarium: a viewing corridor
-lined with themed tanks (tropical reef, kelp forest, deep ocean, jellyfish,
-arctic), each with its own decoration and mobs. Same seed, same aquarium.
+lined with four themed zones, each with its own decoration, mobs, and a
+colored accent trim marking the zone from outside. Same seed, same aquarium.
+
+- **Icy Zone** (light blue accent) — icebergs of packed ice/snow; squid, polar bear.
+- **Kelp Forest** (lime accent) — kelp towers, drip-leaf; cod, salmon, turtle.
+- **Coral Reef** (pink accent) — coral blocks, sea pickles; tropical fish, dolphin.
+- **Deep Ocean Zone** (black accent) — deepslate, ore, amethyst; glow squid, axolotl.
 
 ## Layout
 
@@ -44,11 +49,11 @@ the server on large builds.
 
 ## Extending
 
-- Add a new theme by adding an entry to `THEMES` in `scripts/decorations.js`
-  (floor block, coral/extra block pool, mob pool).
+- Add a new zone by adding an entry to `THEMES` in `scripts/decorations.js`
+  (floor block, accent color, coral/extra block pool, pillar block, mob pool).
 - Change which exhibits get built, their order, or their width by passing
   `exhibits` in the scriptevent JSON, e.g.
-  `{"exhibits":[{"type":"jellyfish","width":10},{"type":"arctic","width":14}]}`.
+  `{"exhibits":[{"type":"icy","width":14},{"type":"deep_ocean","width":16}]}`.
 - `createTankJob`/`createExhibitJob` are reusable building blocks for
   composing more elaborate layouts (tunnels, cylindrical tanks, multi-floor
   buildings) beyond the single-corridor generator in `generator.js`.

@@ -3,11 +3,10 @@ import { createExhibitJob } from "./exhibits.js";
 import { mulberry32, hashStringToSeed } from "./rng.js";
 
 const DEFAULT_EXHIBITS = [
-    { type: "tropical_reef", width: 14 },
-    { type: "kelp_forest", width: 12 },
+    { type: "icy", width: 14 },
+    { type: "kelp_forest", width: 14 },
+    { type: "coral_reef", width: 16 },
     { type: "deep_ocean", width: 16 },
-    { type: "jellyfish", width: 10 },
-    { type: "arctic", width: 14 },
 ];
 
 const CORRIDOR_WIDTH = 4;
