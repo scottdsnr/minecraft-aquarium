@@ -1,0 +1,17 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "Aquarium Generator Resources",
+    "description": "Resource pack companion for the Aquarium Generator behavior pack.",
+    "uuid": "84145127-e7ef-44dd-9b30-ee716359f993",
+    "version": [1, 0, 0],
+    "min_engine_version": [1, 21, 0]
+  },
+  "modules": [
+    {
+      "type": "resources",
+      "uuid": "b1bb77c9-4d44-4c4b-943e-fc0e71a2b66f",
+      "version": [1, 0, 0]
+    }
+  ]
+}
